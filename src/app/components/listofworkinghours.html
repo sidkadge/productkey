@@ -1,0 +1,1469 @@
+<div>
+  <ul class="flex space-x-2 rtl:space-x-reverse">
+    <li>
+      <a href="javascript:;" class="text-primary hover:underline">Components</a>
+    </li>
+    <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+      <span>List Of Working Hours</span>
+    </li>
+  </ul>
+  <div class="space-y-8 pt-5">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-1">
+      <!-- Simple Pills -->
+      <div class="panel">
+        <div class="mb-5 flex items-center justify-between">
+          <h5 class="text-lg font-semibold dark:text-white-light">
+            List Of Working Hours
+          </h5>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center w-1/2">
+            <label for="consultant" class="mr-5 font-bold"
+              >Select Consultant:</label
+            >
+            <select
+              formControlName="consultant"
+              id="consultant"
+              class="form-input w-full max-w-xs"
+            >
+              <option value="Raj">Raj</option>
+              <option value="Riya">Riya</option>
+              <option value="Priya">Priya</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+
+        <hr class="mt-5" />
+        <div class="mb-5">
+          <div class="mt-3 flex flex-wrap">
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'monday' }"
+              (click)="tab2 = 'monday'"
+            >
+              Monday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'tuesday' }"
+              (click)="tab2 = 'tuesday'"
+            >
+              Tuesday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'wednesday' }"
+              (click)="tab2 = 'wednesday'"
+            >
+              Wednesday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'thursday' }"
+              (click)="tab2 = 'thursday'"
+            >
+              Thursday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'friday' }"
+              (click)="tab2 = 'friday'"
+            >
+              Friday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'saturday' }"
+              (click)="tab2 = 'saturday'"
+            >
+              Saturday
+            </a>
+
+            <a
+              href="javascript:;"
+              class="-mb-[1px] block rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2"
+              [ngClass]="{ 'bg-primary text-white': tab2.toLowerCase() == 'sunday' }"
+              (click)="tab2 = 'sunday'"
+            >
+              Sunday
+            </a>
+          </div>
+
+          <div class="flex-1 pt-5 text-sm">
+            <!-- Monday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'monday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Tuesday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'tuesday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Wednesday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'wednesday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Thursday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'thursday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Friday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'friday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Saturday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'saturday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+
+            <!-- Sunday Content -->
+            <div *ngIf="tab2.toLowerCase() === 'sunday'">
+              <div class="relative pt-5">
+                <div class="-mx-2 h-full">
+                  <div
+                    class="flex flex-nowrap items-start gap-5 overflow-x-auto px-2 pb-2"
+                  >
+                    <ng-container
+                      *ngFor="let project of projectList"
+                      key="project.id"
+                    >
+                      <!-- task list -->
+                      <div
+                        [sortablejs]="project.tasks"
+                        [sortablejsOptions]="{ animation: 200, group: 'default', ghostClass: 'sortable-ghost', dragClass:'sortable-drag' }"
+                        class="connect-sorting-content min-h-[auto]"
+                      >
+                        <div
+                          class="sortable-list"
+                          *ngFor="let task of project.tasks"
+                          key="project.id + '' + task.id"
+                        >
+                          <div
+                            class="cursor-move space-y-3 rounded-md bg-[#f4f4f4] p-3 pb-5 shadow dark:bg-white-dark/20"
+                          >
+                            <div class="flex items-center justify-between">
+                              <div
+                                class="flex items-center font-medium hover:text-primary"
+                              >
+                                <icon-clock
+                                  class="shrink-0 ltr:mr-3 rtl:ml-3"
+                                />
+                                <span>10:00 To 11:00</span>
+                              </div>
+                              <div class="flex items-center pl-5">
+                                <button
+                                  type="button"
+                                  class="hover:text-info"
+                                  (click)="addEditTask(project.id, task)"
+                                >
+                                  <icon-edit class="ltr:mr-3 rtl:ml-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  class="hover:text-danger"
+                                  (click)="deleteConfirmModal(project.id, task)"
+                                >
+                                  <icon-trash-lines />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add project modal -->
+              <ngx-custom-modal #isAddProjectModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ params.id ? 'Edit Project' : 'Add Project' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveProject()" class="text-sm">
+                    <div class="grid gap-5">
+                      <div>
+                        <label for="title">Name</label>
+                        <input
+                          id="title"
+                          [(ngModel)]="params.title"
+                          name="title"
+                          type="text"
+                          class="form-input mt-1"
+                          placeholder="Enter Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddProjectModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ params.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- Add Slot modal -->
+              <ngx-custom-modal #isAddTaskModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">
+                    {{ paramsTask.id ? 'Edit Slot' : 'Add Slot' }}
+                  </div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <form (ngSubmit)="saveTask()" class="text-sm">
+                    <div class="grid gap-5">
+                      <!-- New Date Field -->
+                      <div>
+                        <label for="taskDate">Date</label>
+                        <input
+                          id="taskDate"
+                          [(ngModel)]="paramsTask.date"
+                          name="date"
+                          type="date"
+                          class="form-input"
+                          placeholder="Select Date"
+                        />
+                      </div>
+                      <div>
+                        <label for="slotStatus" class="mr-2 font-bold"
+                          >Slot Status :</label
+                        >
+                        <select
+                          formControlName="slotStatus"
+                          id="slotStatus"
+                          class="form-input w-full"
+                        >
+                          <option value="active">Active Slot</option>
+                          <option value="freeze">Freeze Date</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isAddTaskModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                      >
+                        {{ paramsTask.id ? 'Update' : 'Add' }}
+                      </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </ngx-custom-modal>
+
+              <!-- delete task modal -->
+              <ngx-custom-modal #isDeleteModal class="no-footer">
+                <ng-template #modalHeader>
+                  <div class="!font-medium">Delete Task</div>
+                </ng-template>
+                <ng-template #modalBody>
+                  <div class="text-center">
+                    <div
+                      class="mx-auto w-fit rounded-full bg-danger p-4 text-white ring-4 ring-danger/30"
+                    >
+                      <icon-trash-lines />
+                    </div>
+                    <div class="mx-auto mt-5 text-base sm:w-3/4">
+                      Are you sure you want to delete Slot?
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        (click)="isDeleteModal.close()"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="deleteTask()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-custom-modal>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

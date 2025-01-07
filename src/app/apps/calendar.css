@@ -1,0 +1,82 @@
+/* calendar.component.css */
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .modal-header {
+    display: flex;                /* Use flexbox for alignment */
+    align-items: center;          /* Center items vertically */
+    justify-content: space-between; /* Space out title and button */
+    position: relative;
+  }
+  
+  .close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+    /* Add margin or padding as needed to position it nicely */
+  }
+  .modal-body {
+    margin-top: 15px;
+  }
+  
+  .modal-footer {
+    margin-top: 20px;
+    text-align: right;
+  }
+  
+  .modal-footer .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .close span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .close-btn {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;            /* Push button to the far right */
+    line-height: 1;
+  }
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    width: 100px; /* Adjust as needed */
+    margin-right: 10px;
+  }
+  
+  .form-group div {
+    flex: 1;
+  }
+  
+  
+  

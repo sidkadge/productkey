@@ -1,0 +1,1305 @@
+<div>
+  <div class="space-y-8 pt-5 text-center">
+    <div class="flex justify-center space-x-4">
+      <!-- Tab 1: Today's Record -->
+      <button
+        class="badge mb-0 inline-block py-2 px-4 rounded text-lg"
+        [class.bg-green-700]="activeTab === 'record'"   
+        [class.text-white]="activeTab === 'record'"
+        [class.bg-gray-400]="activeTab !== 'record'"   
+        
+        (click)="showTab('record')"
+      >
+        Today's Record
+      </button>
+  
+      <!-- Tab 2: History -->
+      <button
+        class="badge mb-0 inline-block py-2 px-4 rounded text-lg"
+        [class.bg-green-700]="activeTab === 'history'"  
+        [class.text-white]="activeTab === 'history'"
+        [class.bg-orange-400]="activeTab !== 'history'"  
+       
+        (click)="showTab('history')"
+      >
+        History
+      </button>
+    </div>
+    
+    
+    
+    <div *ngIf="activeTab === 'record'" id="content-record" class="tab-content">
+    <div class="panel lg:col-span-2">
+      <div class="mb-5">
+        <div>
+          <ul class="mb-5 grid grid-cols-3">
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex items-center justify-center h-16 w-16 rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 1}"
+                (click)="activeTab5 = 1"
+              >
+                <icon-calendar />
+              </a>
+              <span
+                class="mt-2 block text-center" 
+                [ngClass]="{'text-primary' : activeTab5 === 1}"
+              >
+                Patient Details
+              </span>
+            </li>
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex items-center justify-center h-16 w-16 rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 2}"
+                (click)="activeTab5 = 2"
+              >
+                <icon-user class="h-5 w-5" />
+              </a>
+              <span
+                class="mt-2 block text-center" 
+                [ngClass]="{'text-primary' : activeTab5 === 2}"
+              >
+                Medicine Details
+              </span>
+            </li>
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex items-center justify-center h-16 w-16 rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 3}"
+                (click)="activeTab5 = 3"
+              >
+                <icon-thumb-up class="h-5 w-5" />
+              </a>
+              <span
+                class="mt-2 block text-center" 
+                [ngClass]="{'text-primary' : activeTab5 === 3}"
+              >
+                Summary
+              </span>
+            </li>
+          </ul>
+          
+          
+          
+          
+
+          <div>
+            <ng-container *ngIf="activeTab5 === 1">
+              <form [formGroup]="appointmentForm">
+                <!-- <h5 class="text-lg font-bold mb-4">
+                  Patient Details
+                </h5> -->
+                <div class="mb-4 flex justify-between items-center">
+                  <!-- Left: Mandatory Fields Note -->
+                  <p class="text-red-500 font-semibold">
+                    Fields marked with <span class="text-red-500">*</span> are mandatory.
+                  </p>
+                  <!-- Right: Date -->
+                  <span class="font-bold text-gray-700">Date: {{ todayDate }}</span>
+                </div>
+                
+            
+                <!-- Date, BP, Sugar Section -->
+                <div class="grid grid-cols-4 gap-6">
+                  <!-- Date Input Section -->
+                  <!-- <div>
+                    <label for="date" class="font-bold text-justify">
+                      Date <span class="text-red-500">*</span>
+                    </label>
+                    <div class="d-flex align-items-center mb-3">
+                      <input
+                        type="date"
+                        id="date"
+                        formControlName="date"
+                        class="form-input"
+                        placeholder="dd-mm-yyyy"
+                        autocomplete="off"
+                        [value]="''"
+                        (change)="onSelectionChange()"
+                      />
+                    </div>
+                  </div> -->
+            
+                  <!-- BP Section -->
+                  <div>
+                    <label for="bp" class="font-bold text-justify">
+                      BP: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center gap-3 mb-3">
+                      <!-- Systolic BP Input -->
+                      <div class="flex items-center">
+                        <label for="systolic" class="mr-2 font-semibold">Sys</label>
+                        <input
+                          id="systolic"
+                          type="text"
+                          formControlName="systolic"
+                          class="form-input"
+                          required
+                        />
+                      </div>
+                  
+                      <!-- Diastolic BP Input -->
+                      <div class="flex items-center">
+                        <label for="diastolic" class="mr-2 font-semibold">Dis</label>
+                        <input
+                          id="diastolic"
+                          type="text"
+                          formControlName="diastolic"
+                          class="form-input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    </div>
+                    <!-- Weight Input -->
+                     <div>
+                    <label for="weight" class="font-bold text-justify">
+                      Weight: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center">
+                      <!-- <label for="weight" class="mr-2 font-semibold"></label> -->
+                      <input
+                        id="weight"
+                        type="text"
+                        formControlName="weight"
+                        class="form-input w-24" 
+                        min="0"
+                        step="0.1"
+                        required
+                      />
+                      <small class="ml-2">Kg</small>
+                    </div>
+                  </div>
+                  
+            
+                  <!-- Sugar Section -->
+                  <div>
+                    <label for="sugar" class="font-bold text-justify">
+                      Sugar: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center gap-3 mb-3">
+                      <!-- Fasting Sugar Input -->
+                      <div class="flex items-center">
+                        <label for="fasting" class="mr-2 font-semibold">Fast</label>
+                        <input
+                          id="fasting"
+                          type="text"
+                          formControlName="fasting"
+                          class="form-input"
+                          required
+                        />
+                      </div>
+                      <!-- PP Sugar Input -->
+                      <div class="flex items-center">
+                        <label for="pp" class="mr-2 font-semibold">PP</label>
+                        <input
+                          id="pp"
+                          type="text"
+                          formControlName="pp"
+                          class="form-input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    </div>
+                    <!-- BMI Input -->
+                     <div>
+                    <label for="bmi" class="font-bold text-justify">
+                      BMI: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center">
+                      <!-- <label for="bmi" class="mr-2 font-semibold">BMI</label> -->
+                      <input
+                        id="bmi"
+                        type="text"
+                        formControlName="bmi"
+                        class="form-input w-24" 
+                        min="0"
+                        step="0.1"
+                        required
+                      />
+                      <small class="ml-2">Kg/m²</small>
+                    </div>
+                  </div>
+                  
+                </div>
+            
+                <!-- Illness and Symptoms Section -->
+                <div class="grid grid-cols-2 gap-6 mt-4">
+                  <!-- Illness Text Area -->
+                  <div>
+                    <label for="illness" class="font-bold text-justify">
+                      Illness <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      id="illness"
+                      formControlName="illness"
+                      rows="4"
+                      class="form-input w-full"
+                      placeholder="Describe the illness"
+                      required
+                    ></textarea>
+                  </div>
+            
+                  <!-- Symptoms Text Area -->
+                  <div>
+                    <label for="symptoms" class="font-bold text-justify">
+                      Symptoms 
+                    </label>
+                    <textarea
+                      id="symptoms"
+                      formControlName="symptoms"
+                      rows="4"
+                      class="form-input w-full"
+                      placeholder="Describe the symptoms"
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 mt-4">
+                  <div>
+                    <label for="treatment" class="font-bold text-justify">
+                      Treatment 
+                    </label>
+                    <textarea
+                      id="treatment"
+                      formControlName="treatment"
+                      rows="4"
+                      class="form-input w-full"
+                      placeholder="Describe the treatment"
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+
+
+
+    <!-- Follow-Up Date and Fees Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 mb-4">
+      <!-- Follow-Up Date -->
+      <div>
+        <label for="followUpDate" class="font-bold text-left mb-1">
+          Follow-Up Date 
+        </label>
+        <input
+          id="followUpDate"
+          type="date"
+          formControlName="followUpDate"
+          class="block border border-gray-300 rounded-md p-2 w-36" 
+          placeholder="dd-mm-yyyy"
+          required
+        />
+      </div>
+    
+      <!-- Fees -->
+      <div>
+        <label for="fees" class="font-bold text-left mb-1">
+          Fees <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="fees"
+          type="text"
+          formControlName="fees"
+          class="block border border-gray-300 rounded-md p-2 w-28" 
+          placeholder="Enter fees amount"
+          min="0"
+          step="0.01"
+          required
+        />
+      </div>
+    </div>
+    
+    
+    
+    
+    
+              </form>
+            </ng-container>
+            
+                  
+                  
+                    
+              
+                  
+                  
+                  
+                  <!-- <button type="submit" class="btn btn-primary mt-3">Submit</button> -->
+                  
+
+                  <!-- Subscription Radio Buttons -->
+                  <!-- <div
+                    *ngIf="showSubscription"
+                    class="col-span-1 sm:col-span-2 md:col-span-3 mt-4"
+                  >
+                    <div class="col-span-1 sm:col-span-2 md:col-span-1 mt-4">
+                      <label class="font-bold text-justify">Select Plan:</label>
+                      <div class="grid grid-cols-12 gap-4 mt-2">
+                        <div class="col-span-3 flex items-center">
+                          <input
+                            type="radio"
+                            formControlName="plan"
+                            value="custom"
+                            id="planCustom"
+                            class="mr-2"
+                            (change)="onSubscribeChange(true)"
+                          />
+                          <label for="planCustom">Custom Plan</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- Subscription Type -->
+
+                
+
+                  <!-- Subscription Start Date -->
+              
+              <!-- </form> -->
+
+            
+              <!-- <ng-container *ngIf="isLoading">
+                <span style="border-color: red; border-top-color: red;"  class="ms-1"><b>Loading...</b></span>
+              </ng-container> -->
+
+              
+         
+
+            <!-- Patient Tab -->
+            <ng-container *ngIf="activeTab5 === 2">
+             
+              <div class="mb-4">
+                <p class="text-red-500 font-semibold text-left">
+                  Fields marked with <span class="text-red-500">*</span> are
+                  mandatory.
+                </p>
+              </div>
+
+              <div class="panel">
+                <div class="mb-5 flex items-center justify-between">
+                  <!-- <h5 class="text-lg font-semibold dark:text-white-light">
+                    <b>Appointments</b>
+                  </h5> -->
+                </div>
+                <div class="mb-5">
+                  <div
+                    class="mt-3 flex flex-wrap justify-between space-x-2 text-center rtl:space-x-reverse"
+                  >
+                    <!-- Tab 1: Today's -->
+              
+                    <a
+                      href="javascript:;"
+                      class="block font-semibold flex-auto rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-info hover:text-white m-1"
+                      [ngClass]="{ 'bg-info text-white': tab12.toLowerCase() === 'home', 'bg-gray-300': tab12.toLowerCase() !== 'home' }"
+                      (click)="tab12 = 'home'"
+                    >
+                      Prescription
+                    </a>
+              
+                    <!-- Tab 2: Empty Slots -->
+                    <a
+                      href="javascript:;"
+                      class="block font-semibold flex-auto rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-info hover:text-white m-1"
+                      [ngClass]="{ 'bg-info text-white': tab12.toLowerCase() === 'profile', 'bg-gray-300': tab12.toLowerCase() !== 'profile' }"
+                      (click)="tab12 = 'profile';"
+                    >
+                      Recommended Test
+                    </a>
+              
+                    <!-- Tab 3: Conducted -->
+                    <a
+                      href="javascript:;"
+                      class="block font-semibold flex-auto rounded p-3.5 py-2 !outline-none transition duration-300 hover:bg-info hover:text-white m-1"
+                      [ngClass]="{ 'bg-info text-white': tab12.toLowerCase() === 'conducted', 'bg-gray-300': tab12.toLowerCase() !== 'conducted' }"
+                      (click)="tab12 = 'conducted';"
+                    >
+                      Certificates
+                    </a>
+              
+                   
+                  </div>
+              
+                  <!-- Tab Content -->
+                  <div class="flex-1 pt-5 text-sm">
+                    <!-- Tab 1 Content -->
+                    <div *ngIf="tab12.toLowerCase() === 'home'">
+                      <div class="panel mt-6">
+                        <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
+                          <!-- <h5 class="text-lg font-semibold dark:text-white-light">
+                            Prescription
+                          </h5> -->
+                        </div>
+                    
+                        <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescription()">
+                          <div formArrayName="prescriptions" class="overflow-x-auto">
+                            <table class="table-auto w-full border-collapse border border-gray-300">
+                              <thead>
+                                <tr class="bg-gray-100">
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Medicine Name</th>
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Unit</th>
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Dose</th>
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Days</th>
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Liquid/Day</th>
+                                  <th class="border border-gray-300 px-4 py-2 text-center">Action</th>
+                                </tr>
+                              </thead>
+                              
+                          
+                              <tbody>
+                                <tr
+                                  *ngFor="let prescription of prescriptions.controls; let i = index"
+                                  [formGroupName]="i"
+                                >
+                                  <!-- Medicine Name -->
+                                  <td class="border px-4 py-2">
+                                    <input
+                                      type="text"
+                                      formControlName="medicine"
+                                      class="form-input w-48"  
+                                      placeholder="Enter medicine name"
+                                      required
+                                    />
+                                  </td>
+                          
+                                  <!-- Unit with Measurement Dropdown -->
+                                  <td class="border px-4 py-2">
+                                    <div class="flex gap-2 items-center">
+                                      <input
+                                        type="text"
+                                        formControlName="unit"
+                                        class="form-input w-20"
+                                        placeholder="Enter unit"
+                                        required
+                                      />
+                                      <select formControlName="unitDropdown" class="form-input w-14 text-sm">
+                                        <option value="gm">gm</option>
+                                        <option value="mg">mg</option>
+                                        <option value="ml">ml</option>
+                                      </select>
+                                    </div>
+                                  </td>
+                          
+                                  <!-- Dose Checkboxes -->
+                                  <td class="border px-4 py-2 text-center">
+                                    <div class="flex gap-4 justify-center">
+                                      <label class="flex flex-col items-center">
+                                        <span>Mor.</span>
+                                        <input type="checkbox" formControlName="morning" />
+                                      </label>
+                                      <label class="flex flex-col items-center">
+                                        <span>Aft.</span>
+                                        <input type="checkbox" formControlName="afternoon" />
+                                      </label>
+                                      <label class="flex flex-col items-center">
+                                        <span>Eve.</span>
+                                        <input type="checkbox" formControlName="evening" />
+                                      </label>
+                                    </div>
+                                  </td>
+                          
+                                  <!-- Days -->
+                                  <td class="border px-4 py-2 text-center">
+                                    <input
+                                      type="text"
+                                      formControlName="days"
+                                      class="form-input w-16"
+                                      placeholder="Days"
+                                      required
+                                    />
+                                  </td>
+                          
+                                  <!-- Liquid/Day -->
+                                  <td class="border px-4 py-2 text-center">
+                                    <input
+                                      type="text"
+                                      formControlName="liquidPerDay"
+                                      class="form-input w-24"
+                                      placeholder="Enter quantity"
+                                      required
+                                    />
+                                  </td>
+                          
+                                  <!-- Action Buttons -->
+                                  <td class="border px-4 py-2 text-center">
+                                    <div class="flex items-center gap-2">
+                                      <!-- Remove Button -->
+                                      <a
+                                        *ngIf="i !== 0"
+                                        (click)="removePrescription(i)"
+                                        class="cursor-pointer text-danger"
+                                      >
+                                      <svg
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      class="h-5 w-5 text-danger"
+                                    >
+                                      <path
+                                        d="M20.5001 6H3.5"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                      ></path>
+                                      <path
+                                        d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                      ></path>
+                                      <path
+                                        opacity="0.5"
+                                        d="M9.5 11L10 16"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                      ></path>
+                                      <path
+                                        opacity="0.5"
+                                        d="M14.5 11L14 16"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                      ></path>
+                                      <path
+                                        opacity="0.5"
+                                        d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                      ></path>
+                                    </svg>
+                                      </a>
+                          
+                                      <!-- Add Button -->
+                                      <button
+                                        *ngIf="i === prescriptions.controls.length - 1"
+                                        type="button"
+                                        class="btn btn-primary ml-2"
+                                        (click)="addPrescription()"
+                                      >
+                                        <svg
+                                          width="12"
+                                          height="12"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          class="h-6 w-6"
+                                        >
+                                          <path
+                                            d="M12 5V19M5 12H19"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                        
+                          <!-- Submit Button -->
+                          <div class="mt-6">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                          </div>
+                        </form>
+                        
+                        
+                        
+                        
+                        <!-- Address and Signature Section -->
+                        <div class="mt-10 p-5">
+                          <div class="grid grid-cols-2 gap-6">
+                            <!-- Address Section -->
+                            <div>
+                              <h4 class="text-lg font-bold mb-3">Address</h4>
+                              <p class="text-base">
+                                606, Umesh Shetty Rd, Sector 25, Pradhikaran, Nigdi, Pimpri-Chinchwad, Maharashtra 411044
+                              </p>
+                            </div>
+                            
+                            
+                            <!-- Signature Section -->
+                            <div>
+                              <h4 class="text-lg font-bold mb-3">Sign</h4>
+                              <!-- <div class="flex items-center gap-5">
+                                <p class="text-gray-500">Upload your signature:</p>
+                                <input type="file" class="form-input" />
+                              </div> -->
+                              <!-- Center the Signature Image -->
+                              <div class="mt-5 flex justify-center">
+                                <img src="/assets/images/sign.jpeg" alt="Signature" class="w-32 h-auto" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+
+                        
+                        
+                        
+                      </div>
+                    </div>
+
+                        <!-- Tab 1 Content -->
+                        <div *ngIf="tab12.toLowerCase() === 'profile'">
+                          <div class="panel mt-6">
+                            <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
+                              <!-- <h5 class="text-lg font-semibold dark:text-white-light">
+                                Test
+                              </h5> -->
+                            </div>
+                        
+                            <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescription()">
+                              <div class="test-section">
+                                <!-- Lab Tests and Radiology Tests in One Row -->
+                                <div class="grid grid-cols-2 gap-4">
+                                  <!-- Lab Tests -->
+                                  <div class="pr-4 border-r border-gray-300">
+                                    <label class="font-bold block mb-2">Lab Tests</label>
+                                    <div class="grid grid-cols-2 gap-y-3">
+                                      <div *ngFor="let test of labTests" class="form-check flex items-center">
+                                        <input
+                                          type="checkbox"
+                                          class="form-check-input"
+                                          [value]="test.name"
+                                          (change)="onCheckboxChange($event)"
+                                          [checked]="selectedLabTests.includes(test.name)"
+                                          id="lab_test_{{ test.id }}"
+                                        />
+                                        <label class="form-check-label ml-2" for="lab_test_{{ test.id }}">{{ test.name }}</label>
+                                      </div>
+                                    </div>
+                                  </div>
+                              
+                                  <!-- Radiology Tests -->
+                                  <div>
+                                    <label class="font-bold block mb-2">Radiology Tests</label>
+                                    <div class="grid grid-cols-2 gap-y-3">
+                                      <div *ngFor="let test of radiologyTests" class="form-check flex items-center">
+                                        <input
+                                          type="checkbox"
+                                          class="form-check-input"
+                                          [value]="test.name"
+                                          (change)="onRadiologyCheckboxChange($event)"
+                                          [checked]="selectedRadiologyTests.includes(test.name)"
+                                          id="radiology_test_{{ test.id }}"
+                                        />
+                                        <label class="form-check-label ml-2" for="radiology_test_{{ test.id }}">{{ test.name }}</label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                  <div class="col-6">
+                                    <div>
+                                      <label class="font-bold block mb-2">Lab Tests</label>
+                                      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 gap-3">
+                                        <div *ngFor="let test of labTests" class="form-check flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            [value]="test.name"
+                                            (change)="onCheckboxChange($event)"
+                                            [checked]="selectedLabTests.includes(test.name)"
+                                            id="lab_test_{{ test.name }}"
+                                          />
+                                          <label class="form-check-label ml-2" for="lab_test_{{ test.name }}">{{ test.name }}</label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="mt-4">
+                                      <h5 class="font-bold mb-2">Selected Lab Tests:</h5>
+                                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div *ngFor="let selectedTest of selectedLabTests" class="bg-gray-100 p-2 rounded shadow">
+                                          {{ selectedTest }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                
+                                  
+                                  <div class="w-full max-w-md mx-auto">
+                                    <label for="labTests" class="block text-sm font-medium text-gray-700 mb-2">
+                                      Select Lab Tests
+                                    </label>
+                                    <select
+                                      id="labTests"
+                                      [(ngModel)]="selectedLabTests"
+                                      multiple
+                                      class="form-select w-full h-32 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    >
+                                      <option
+                                        *ngFor="let test of labTests"
+                                        [ngValue]="test.name"
+                                      >
+                                        {{ test.name }}
+                                      </option>
+                                    </select>
+                                    <div class="mt-4">
+                                      <h3 class="text-sm font-medium text-gray-700">Selected Tests:</h3>
+                                      <ul class="list-disc pl-5 text-gray-600">
+                                        <li *ngFor="let selected of selectedLabTests">
+                                          {{ selected }}
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  
+                                </div> -->
+                                
+                              
+                                <!-- Display Selected Lab Tests and Radiology Tests in a DataTable -->
+                                <div class="datatable mt-6">
+                                  <div *ngIf="selectedTests.length === 0" class="text-left py-4">
+                                    <p>No tests selected</p>
+                                  </div>
+                                  <div *ngIf="selectedTests.length > 0" class="overflow-x-auto">
+                                    <table class="min-w-full table-auto table-striped table-hover">
+                                      <thead class="bg-gray-200">
+                                        <tr>
+                                          <th class="px-4 py-2">Sr. No.</th>
+                                          <th class="px-4 py-2">Test Type</th>
+                                          <th class="px-4 py-2">Test Name</th>
+                                          
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let test of selectedTests; let i = index" class="bg-white hover:bg-gray-100 border-b transition duration-300 ease-in-out">
+                                          <td class="px-4 py-2">{{ i + 1 }}</td>
+                                          <td class="px-4 py-2">{{ test.testDetails }}</td>
+                                          <td class="px-4 py-2">{{ test.testName }}</td>
+                                          
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              
+
+                              
+                              
+                              
+                              
+                            
+                              <!-- Submit Button -->
+                              <div class="mt-6">
+                                <button type="submit" class="btn btn-success">
+                                  Submit
+                                </button>
+                              </div>
+                            </form>
+                            
+                            
+                 
+                            
+                            
+    
+                            
+                            
+                            
+                          </div>
+                        </div>
+
+
+                  </div>
+                </div>
+              
+                <ng-container *ngIf="codeArr.includes('code12')">
+                  <!-- The preformatted code section can remain unchanged -->
+                </ng-container>
+              
+                <!-- Conducted Modal -->
+                <!-- Modal form in admindashboard.html -->
+           
+              </div>
+
+              <!-- <form [formGroup]="appointmentForm">
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 mb-4 p-5"
+                >
+                 
+                  <div class="col-span-1 lg:col-span-6">
+                    <label for="full_name" class="font-bold text-justify">
+                      Patient's Name : <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="full_name"
+                      type="text"
+                      formControlName="full_name"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['full_name']?.errors?.['required'] && f['full_name']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Patient's name is required.
+                    </small>
+                    <small
+                      *ngIf="f['full_name']?.errors?.['pattern'] && f['full_name']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Only letters and spaces are allowed in the name.
+                    </small>
+                  </div>
+
+                 
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="age" class="font-bold text-justify"
+                      >Age: <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="age"
+                      type="text"
+                      formControlName="age"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['age']?.errors?.['required'] && f['age']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Age is required.
+                    </small>
+                    <small
+                      *ngIf="f['age']?.errors?.['pattern'] && f['age']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Age must be a valid number.
+                    </small>
+                  </div>
+
+                
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="mobile_no" class="font-bold text-justify"
+                      >Mobile No : <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="mobile_no"
+                      type="text"
+                      formControlName="mobile_no"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['mobile_no']?.errors?.['required'] && f['mobile_no']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Mobile number is required.
+                    </small>
+                    <small
+                      *ngIf="f['mobile_no']?.errors?.['pattern'] && f['mobile_no']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Mobile number must be 10 digits.
+                    </small>
+                  </div>
+
+                 
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="email_id" class="font-bold text-justify"
+                      >Email Id: <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="email_id"
+                      type="email"
+                      formControlName="email_id"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['email_id']?.errors?.['required'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email is required.
+                    </small>
+                    <small
+                      *ngIf="f['email_id']?.errors?.['email'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email must be a valid format.
+                    </small>
+                    <small
+                      *ngIf="f['email_id']?.errors?.['pattern'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email does not match the required format.
+                    </small>
+                  </div>
+
+              
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-12"
+                  >
+                    <label for="location" class="font-bold text-justify"
+                      >Address: <span class="text-red-500">*</span></label
+                    >
+                    <textarea
+                      id="location"
+                      rows="3"
+                      formControlName="location"
+                      class="form-textarea w-full"
+                    ></textarea>
+                    <small
+                      *ngIf="f['location']?.errors?.['required'] && f['location']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Address is required.
+                    </small>
+                  </div>
+                </div>
+              </form> -->
+            </ng-container>
+
+            <!-- Summary Tab -->
+            <ng-container *ngIf="activeTab5 === 3">
+              <div class="panel m-5">
+                <h5 class="text-lg font-bold mb-4">
+                  Summary of Appointment
+                </h5>
+
+                <div class="space-y-4">
+                  <div
+                    *ngIf="summaryData.branch"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Branch:</h6>
+                    <p class="font-bold text-sm sm:text-base">
+                      {{ summaryData.branchName }}
+                    </p>
+                    <input type="hidden" [value]="summaryData.branch" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.hawservices"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.hawservices" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.consultant"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.consultant" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.date"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Date:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.date | date: 'dd-MM-yyyy' }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.subscription"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Subscribe to Physiotherapy?:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.subscription }}
+                    </p>
+                  </div>
+
+                  <!-- <div hidden class="flex items-center justify-between py-2">
+                    <h6 class="font-bold text-sm sm:text-base">Select Plan:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.plan }}
+                    </p>
+                  </div> -->
+
+                  <div
+                    *ngIf="summaryData.subscriptionType"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Number of Sessions:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.subscriptionType }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.startDate"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Start Date:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.startDate | date: 'dd-MM-yyyy' }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.full_name"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Full Name:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.full_name }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Age:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.age }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.mobile_no"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Mobile Number:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.mobile_no }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Email ID:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.email_id }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Location:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.location }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.slot && !isAnySlotSelected()"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.slot" />
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Health Issues:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.healthissues }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="codeArr.length > 0"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Code Selection:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ codeArr.join(', ') }}
+                    </p>
+                  </div>
+
+                  <!-- <div *ngIf="isAnySlotSelected()" class="panel">
+                    <h4 class="mt-4 font-bold text-sm sm:text-base">
+                      Selected Custom Slots:
+                    </h4>
+                    <div *ngIf="isAnySlotSelected()">
+                      <div
+                        *ngFor="let day of weekDays"
+                        class="flex items-center justify-between py-2"
+                      >
+                        <h6 class="font-bold text-sm sm:text-base">
+                          {{ day }}:
+                        </h6>
+                        <p class="font-semibold text-sm sm:text-base">
+                          {{ summaryData.slots[day]?.time || 'Not selected' }}
+                          <span
+                            *ngIf="summaryData.slots[day]?.id"
+                            class="text-xs"
+                            >(ID: {{ summaryData.slots[day]?.id }})</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </div> -->
+                  <div *ngIf="isAnySlotSelected()" class="panel">
+                    <h4 class="mt-4 font-bold text-sm sm:text-base">
+                      Selected Custom Slots:
+                    </h4>
+                    <div *ngIf="isAnySlotSelected()">
+                      <div
+                        *ngFor="let day of weekDays"
+                        class="flex items-center justify-between py-2"
+                      >
+                        <h6 class="font-bold text-sm sm:text-base">
+                          {{ day }}:
+                        </h6>
+                        <p class="font-semibold text-sm sm:text-base">
+                          {{ summaryData.slots[day]?.time || 'Not selected' }}
+                          <span
+                            *ngIf="summaryData.slots[day]?.id"
+                            class="text-xs"
+                          >
+                          </span>
+                          <!-- Hidden input to pass the ID value -->
+                          <input
+                            *ngIf="summaryData.slots[day]?.id"
+                            type="hidden"
+                            [value]="summaryData.slots[day]?.id"
+                            name="slotId_{{ day }}"
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="flex justify-between">
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="activeTab5 === 1"
+              (click)="moveToPreviousTab()"
+            >
+              Back
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="activeTab5 === 3"
+              [ngStyle]="{ display: activeTab5 === 3 ? 'none' : 'block' }"
+              (click)="moveToNextTab()"
+            >
+              Continue
+            </button> -->
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!isSectionValid() || activeTab5 === 3"
+              [ngStyle]="{ display: activeTab5 === 3 ? 'none' : 'block' }"
+              (click)="moveToNextTab()"
+            >
+              Continue
+            </button>
+
+            <!-- Your HTML structure -->
+            <ng-container *ngIf="activeTab5 === 3">
+              <!-- Summary Content -->
+
+              <!-- <button type="button" class="btn btn-primary">
+                {{ activeTab5 === 3 ? 'Submit' : 'Continue' }}
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="onButtonClick()"
+              >
+                {{ activeTab5 === 3 ? 'Submit' : 'Continue' }}
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div *ngIf="activeTab === 'history'" id="content-history" class="tab-content">
+
+      <div class="panel lg:col-span-2">
+      <h4 class="text-lg font-bold mb-4">Patient History</h4>
+      
+      <!-- Date Input -->
+      <div class="flex items-center space-x-4 mb-6">
+        <label for="history-date" class="font-medium">Select Date:</label>
+        <input 
+          type="date" 
+          id="history-date" 
+          class="border rounded px-3 py-2 w-full sm:w-auto" 
+          [(ngModel)]="selectedDate"
+          (change)="fetchPatientHistory()"
+        />
+      </div>
+    
+      <!-- Display Patient History -->
+      <div *ngIf="patientHistory && patientHistory.length > 0">
+        <h5 class="font-bold mb-3">Patient History for {{ selectedDate | date }}</h5>
+        <table class="min-w-full table-auto table-striped table-hover border">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="px-4 py-2 border">#</th>
+              <th class="px-4 py-2 border">Test Name</th>
+              <th class="px-4 py-2 border">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let history of patientHistory; let i = index" class="bg-white hover:bg-gray-100">
+              <td class="px-4 py-2 border">{{ i + 1 }}</td>
+              <td class="px-4 py-2 border">{{ history.testName }}</td>
+              <td class="px-4 py-2 border">{{ history.details }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      <!-- No History Message -->
+      <div *ngIf="!patientHistory || patientHistory.length === 0" class="text-gray-500 mt-4">
+        <p>No history available for the selected date.</p>
+      </div>
+    </div>
+  </div>
+    
+  </div>
+</div>
+
+<div
+  *ngIf="isLoading"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+>
+  <div
+    class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-white rounded-full"
+    role="status"
+  >
+    <span class="visually-hidden">*🤒*</span>
+  </div>
+</div>

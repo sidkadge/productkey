@@ -1,0 +1,861 @@
+<div>
+  <div class="space-y-8 pt-5 text-center">
+    <h4 class="badge mb-0 inline-block bg-primary text-base hover:top-0">
+      Book Appointment
+    </h4>
+
+    <div class="panel lg:col-span-2">
+      <div class="mb-5">
+        <div>
+          <ul class="mb-5 grid grid-cols-3">
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex h-16 w-16 items-center justify-center rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 1}"
+                (click)="activeTab5 = 1"
+              >
+                <icon-calendar />
+              </a>
+              <span
+                class="mt-2 block text-center"
+                [ngClass]="{'text-primary' : activeTab5 === 1}"
+                >Appointment</span
+              >
+            </li>
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex h-16 w-16 items-center justify-center rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 2}"
+                (click)="activeTab5 = 2"
+              >
+                <icon-user class="h-5 w-5" />
+              </a>
+              <span
+                class="mt-2 block text-center"
+                [ngClass]="{'text-primary' : activeTab5 === 2}"
+                >Patient</span
+              >
+            </li>
+            <li class="mx-auto">
+              <a
+                href="javascript:;"
+                class="flex h-16 w-16 items-center justify-center rounded-full border-[3px]"
+                [ngClass]="{'!border-primary !bg-primary text-white': activeTab5 === 3}"
+                (click)="activeTab5 = 3"
+              >
+                <icon-thumb-up class="h-5 w-5" />
+              </a>
+              <span
+                class="mt-2 block text-center"
+                [ngClass]="{'text-primary' : activeTab5 === 3}"
+                >Summary</span
+              >
+            </li>
+          </ul>
+
+          <div>
+            <ng-container *ngIf="activeTab5 === 1">
+              <form [formGroup]="appointmentForm">
+                <h5 class="text-lg font-bold mb-4">
+                  Appointment Details              
+                  </h5>
+                <div class="mb-4">
+                  <p class="text-red-500 font-semibold text-left">
+                    Fields marked with <span class="text-red-500">*</span> are
+                    mandatory.
+                  </p>
+                </div>
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-4 p-5 bafp"
+                >
+                  <!-- Branch Selection -->
+                  <div class="col-span-1 sm:col-span-2 md:col-span-3">
+                    <label
+                      for="branch"
+                      class="font-bold text-justify branchRes"
+                    >
+                      Branch: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <select
+                        formControlName="branch"
+                        id="branch"
+                        class="form-input w-full pr-10 appearance-none"
+                        (change)="onSelectionChange()"
+                      >
+                        <option value="" disabled selected>
+                          Select branch
+                        </option>
+                        <ng-container *ngFor="let branch of branches">
+                          <option [value]="branch.id">
+                            {{ branch.branch_name }}
+                          </option>
+                        </ng-container>
+                      </select>
+                      <span
+                        class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none"
+                      >
+                        ▼
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Health & Wellness Services Selection -->
+                  <div class="col-span-1 sm:col-span-2 md:col-span-3">
+                    <label for="hawservices" class="font-bold text-justify">
+                      Health & Wellness Services:<span class="text-red-500"
+                        >*</span
+                      >
+                    </label>
+
+                    <div class="relative">
+                      <select
+                        id="section"
+                        class="form-input w-full pr-10 appearance-none"
+                        formControlName="section"
+                        (change)="onSelectionChange()"
+                      >
+                        <!-- Default option showing 'Select a service' -->
+                        <option value="" disabled selected>
+                          Select a service
+                        </option>
+                        <option
+                          *ngFor="let section of sectionsList"
+                          [value]="section.id"
+                        >
+                          {{ section.section_name }}
+                        </option>
+                      </select>
+                      <span
+                        class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none"
+                      >
+                        ▼
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Consultant Selection (Conditional) -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-3"
+                    *ngIf="appointmentForm.get('section')?.value !== '6'"
+                  >
+                    <label for="consultant" class="font-bold text-justify">
+                      Consultant: <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <select
+                        formControlName="consultant"
+                        id="consultant"
+                        class="form-input w-full pr-10 appearance-none"
+                        (change)="onSelectionChange()"
+                      >
+                        <option value="" disabled selected>
+                          Select a consultant
+                        </option>
+                        <ng-container *ngFor="let consultant of consultants">
+                          <option [value]="consultant.id">
+                            {{ consultant.name }}
+                          </option>
+                        </ng-container>
+                      </select>
+                      <span
+                        class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none"
+                        >▼</span
+                      >
+                    </div>
+                  </div>
+
+                  <!-- Health Issues Input (Conditional) -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-3"
+                    *ngIf="appointmentForm.get('section')?.value !== '6'"
+                  >
+                    <label for="healthissues" class="font-bold text-justify"
+                      >Health Issues: <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="healthissues"
+                      type="text"
+                      formControlName="healthissues"
+                      class="form-input"
+                    />
+                  </div>
+
+                  <!-- Date Selection -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-3"
+                    *ngIf="appointmentForm.get('section')?.value !== '6'"
+                  >
+                    <label for="date" class="font-bold text-justify"
+                      >Date <span class="text-red-500">*</span></label
+                    >
+                    <div class="d-flex align-items-center">
+                      <input
+                        type="date"
+                        id="date"
+                        formControlName="date"
+                        class="form-input w-full"
+                        [min]="minDate"
+                        [max]="maxDate"
+                        placeholder="dd-mm-yyyy"
+                        autocomplete="off"
+                        [value]="''"
+                        (change)="onSelectionChange()"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Subscription Radio Buttons -->
+                  <!-- <div
+                    *ngIf="showSubscription"
+                    class="col-span-1 sm:col-span-2 md:col-span-3 mt-4"
+                  >
+                    <div class="col-span-1 sm:col-span-2 md:col-span-1 mt-4">
+                      <label class="font-bold text-justify">Select Plan:</label>
+                      <div class="grid grid-cols-12 gap-4 mt-2">
+                        <div class="col-span-3 flex items-center">
+                          <input
+                            type="radio"
+                            formControlName="plan"
+                            value="custom"
+                            id="planCustom"
+                            class="mr-2"
+                            (change)="onSubscribeChange(true)"
+                          />
+                          <label for="planCustom">Custom Plan</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- Subscription Type -->
+
+                  <div
+                    *ngIf="appointmentForm.get('section')?.value === '6' "
+                    class="col-span-1 sm:col-span-2 md:col-span-3 mt-4"
+                  >
+                    <label
+                      for="subscriptionType"
+                      class="font-bold text-justify"
+                    >
+                      Number of Sessions:<span class="text-red-500">*</span>
+                    </label>
+                    <select
+                      formControlName="subscriptionType"
+                      class="form-input w-full"
+                      id="subscriptionType"
+                      (change)="onSelectionChange()"
+                    >
+                      <option *ngFor="let day of daysArray" [value]="day">
+                        {{ day }} Days
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- Subscription Start Date -->
+                  <div
+                    *ngIf="appointmentForm.get('section')?.value === '6' "
+                    class="col-span-1 sm:col-span-2 md:col-span-3 mt-4"
+                  >
+                    <label for="startDate" class="font-bold text-justify"
+                      >Select Start Date:<span class="text-red-500"
+                        >*</span
+                      ></label
+                    >
+                    <input
+                      id="startDate"
+                      type="date"
+                      formControlName="startDate"
+                      (change)="onSelectionChange()"
+                      class="form-input w-full"
+                      onclick="this.showPicker()"
+                      [min]="restrictedStartDate"
+                      />
+                  </div>
+                </div>
+              </form>
+
+              <form [formGroup]="appointmentForm">
+                <div
+                  *ngIf="appointmentForm.get('date')?.value && 
+                         appointmentForm.get('section')?.value"
+                >
+                  <div class="mb-4 pl-5" *ngIf="availableSlots.length > 0">
+                    <!-- Appointment Slot Title -->
+                    <div class="mb-5 flex items-center justify-between">
+                      <h5 class="text-lg font-semibold dark:text-white-light">
+                        Select Appointment Slots:
+                        <span class="text-red-500">*</span>
+                      </h5>
+                    </div>
+                    <div
+                      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+                    >
+                      <div
+                        *ngFor="let slot of availableSlots"
+                        class="flex items-center"
+                      >
+                        <label
+                          for="slot-{{ slot.id }}"
+                          class="flex items-center cursor-pointer ml-2"
+                        >
+                          <input
+                            type="radio"
+                            id="slot-{{ slot.id }}"
+                            name="slot"
+                            [value]="slot.id"
+                            formControlName="slot"
+                            class="form-radio"
+                          />
+                          <span class="font-bold text-justify">
+                            {{ slot.slots_time.split('.')[0] }}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <!-- <ng-container *ngIf="isLoading">
+                <span style="border-color: red; border-top-color: red;"  class="ms-1"><b>Loading...</b></span>
+              </ng-container> -->
+
+              <form [formGroup]="appointmentForm">
+                <div
+                  *ngIf="appointmentForm.get('section')?.value === '6' && 
+                   appointmentForm.get('startDate')?.value"
+                >
+                  <h3 class="font-bold text-lg mb-4">Select Slots</h3>
+
+                  <!-- Tabs for days of the week -->
+                  <div class="border-b border-gray-200">
+                    <ul
+                      class="flex flex-wrap -mb-px text-sm font-medium text-center overflow-x-auto sm:overflow-visible"
+                      role="tablist"
+                    >
+                      <li
+                        *ngFor="let day of weekDays; let i = index"
+                        class="mr-2"
+                      >
+                        <a
+                          href="javascript:void(0)"
+                          [ngClass]="{
+                            'border-blue-500 text-blue-600': activeTab6 === i + 1,
+                            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab6 !== i + 1
+                          }"
+                          class="inline-block px-4 py-2 border-b-2"
+                          (click)="activeTab6 = i + 1"
+                        >
+                          {{ day }}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Display slots for the selected day -->
+                  <div *ngIf="weekDays.length" class="mt-4">
+                    <div
+                      *ngFor="let day of weekDays; let i = index"
+                      [hidden]="activeTab6 !== i + 1"
+                    >
+                      <h5 class="text-lg font-semibold dark:text-white-light">
+                        Available Slots for {{ day }}:
+                      </h5>
+
+                      <div
+                        *ngIf="staticSlotData[day] && staticSlotData[day].length > 0"
+                      >
+                        <!-- Display the slots if available -->
+                        <div
+                          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4"
+                        >
+                          <div *ngFor="let slot of staticSlotData[day]">
+                            <label
+                              for="slot-{{ day }}-{{ slot.time.split('.')[0] }}"
+                              class="flex items-center cursor-pointer ml-2"
+                            >
+                              <input
+                                type="radio"
+                                id="slot-{{ day }}-{{ slot.time.split('.')[0] }}"
+                                name="slot-{{ day }}"
+                                [value]="slot"
+                                (change)="onSlotSelect(slot.time.split('.')[0], slot.id, day)"
+                                class="form-radio"
+                              />
+                              <span class="font-bold text-justify">
+                                {{ slot.time.split('.')[0] }}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Show message if no slots are available -->
+                      <div
+                        *ngIf="!staticSlotData[day] || staticSlotData[day].length === 0"
+                        class="text-lg text-orange-500 font-bold mt-2"
+                      >
+                        Service not available for this day.
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="mt-8 mb-1 border-black border-2" />
+                  <hr class="my-1 border-black border-1" />
+                  <!-- Display summary of selected slots -->
+                  <div class="panel m-5">
+                    <h4 class="mt-4 font-bold" *ngIf="isAnySlotSelected()">
+                      Selected Custom Slots:
+                    </h4>
+                    <div *ngIf="isAnySlotSelected()">
+                      <div *ngFor="let day of weekDays">
+                        <div class="flex items-center justify-between py-2">
+                          <h6 class="font-bold">{{ day }}:</h6>
+                          <p class="font-semibold">
+                            {{ summaryData.slots[day]?.time || 'Not selected' }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+
+            <!-- Patient Tab -->
+            <ng-container *ngIf="activeTab5 === 2">
+              <h5 class="text-lg font-bold mb-4">
+                Patient Details              
+                </h5>
+              <div class="mb-4">
+                <p class="text-red-500 font-semibold text-left">
+                  Fields marked with <span class="text-red-500">*</span> are
+                  mandatory.
+                </p>
+              </div>
+
+              <form [formGroup]="appointmentForm">
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 mb-4 p-5"
+                >
+                  <!-- Patient's Name -->
+                  <div class="col-span-1 lg:col-span-6">
+                    <label for="full_name" class="font-bold text-justify">
+                      Patient's Name : <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="full_name"
+                      type="text"
+                      formControlName="full_name"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['full_name']?.errors?.['required'] && f['full_name']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Patient's name is required.
+                    </small>
+                    <small
+                      *ngIf="f['full_name']?.errors?.['pattern'] && f['full_name']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Only letters and spaces are allowed in the name.
+                    </small>
+                  </div>
+
+                  <!-- Age -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="age" class="font-bold text-justify"
+                      >Age: <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="age"
+                      type="text"
+                      formControlName="age"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['age']?.errors?.['required'] && f['age']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Age is required.
+                    </small>
+                    <small
+                      *ngIf="f['age']?.errors?.['pattern'] && f['age']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Age must be a valid number.
+                    </small>
+                  </div>
+
+                  <!-- Mobile No -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="mobile_no" class="font-bold text-justify"
+                      >Mobile No : <span class="text-red-500">*</span></label
+                    >
+                    <input
+                      id="mobile_no"
+                      type="text"
+                      formControlName="mobile_no"
+                      class="form-input w-full"
+                    />
+                    <small
+                      *ngIf="f['mobile_no']?.errors?.['required'] && f['mobile_no']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Mobile number is required.
+                    </small>
+                    <small
+                      *ngIf="f['mobile_no']?.errors?.['pattern'] && f['mobile_no']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Mobile number must be 10 digits.
+                    </small>
+                  </div>
+
+                  <!-- Email ID -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-6"
+                  >
+                    <label for="email_id" class="font-bold text-justify"
+                      >Email Id: </label
+                    >
+                    <input
+                      id="email_id"
+                      type="email"
+                      formControlName="email_id"
+                      class="form-input w-full"
+                    />
+                    <!-- <small
+                      *ngIf="f['email_id']?.errors?.['required'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email is required.
+                    </small> -->
+                    <small
+                      *ngIf="f['email_id']?.errors?.['email'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email must be a valid format.
+                    </small>
+                    <small
+                      *ngIf="f['email_id']?.errors?.['pattern'] && f['email_id']?.touched"
+                      class="text-red-500 text-left block"
+                    >
+                      Email does not match the required format.
+                    </small>
+                  </div>
+
+                  <!-- Address -->
+                  <div
+                    class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-12"
+                  >
+                    <label for="location" class="font-bold text-justify"
+                      >Address: </label
+                    >
+                    <textarea
+                      id="location"
+                      rows="3"
+                      formControlName="location"
+                      class="form-textarea w-full"
+                    ></textarea>
+                 
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+
+            <!-- Summary Tab -->
+            <ng-container *ngIf="activeTab5 === 3">
+              <div class="panel m-5">
+                <h5 class="text-lg font-bold mb-4">
+                  Summary of Appointment
+                </h5>
+
+                <div class="space-y-4">
+                  <div
+                    *ngIf="summaryData.branch"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Branch:</h6>
+                    <p class="font-bold text-sm sm:text-base">
+                      {{ summaryData.branchName }}
+                    </p>
+                    <input type="hidden" [value]="summaryData.branch" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.hawservices"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.hawservices" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.consultant"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.consultant" />
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.date"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Date:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.date | date: 'dd-MM-yyyy' }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.subscription"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Subscribe to Physiotherapy?:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.subscription }}
+                    </p>
+                  </div>
+
+                  <!-- <div hidden class="flex items-center justify-between py-2">
+                    <h6 class="font-bold text-sm sm:text-base">Select Plan:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.plan }}
+                    </p>
+                  </div> -->
+
+                  <div
+                    *ngIf="summaryData.subscriptionType"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Number of Sessions:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.subscriptionType }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.startDate"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Start Date:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.startDate | date: 'dd-MM-yyyy' }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.full_name"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Full Name:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.full_name }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Age:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.age }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.mobile_no"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Mobile Number:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.mobile_no }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Email ID:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.email_id }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">Location:</h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.location }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="summaryData.slot && !isAnySlotSelected()"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <input type="hidden" [value]="summaryData.slot" />
+                  </div>
+
+                  <div
+                    *ngIf="false"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Health Issues:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ summaryData.healthissues }}
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="codeArr.length > 0"
+                    class="flex items-center justify-between py-2"
+                  >
+                    <h6 class="font-bold text-sm sm:text-base">
+                      Code Selection:
+                    </h6>
+                    <p class="font-semibold text-sm sm:text-base">
+                      {{ codeArr.join(', ') }}
+                    </p>
+                  </div>
+
+                  <!-- <div *ngIf="isAnySlotSelected()" class="panel">
+                    <h4 class="mt-4 font-bold text-sm sm:text-base">
+                      Selected Custom Slots:
+                    </h4>
+                    <div *ngIf="isAnySlotSelected()">
+                      <div
+                        *ngFor="let day of weekDays"
+                        class="flex items-center justify-between py-2"
+                      >
+                        <h6 class="font-bold text-sm sm:text-base">
+                          {{ day }}:
+                        </h6>
+                        <p class="font-semibold text-sm sm:text-base">
+                          {{ summaryData.slots[day]?.time || 'Not selected' }}
+                          <span
+                            *ngIf="summaryData.slots[day]?.id"
+                            class="text-xs"
+                            >(ID: {{ summaryData.slots[day]?.id }})</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </div> -->
+                  <div *ngIf="isAnySlotSelected()" class="panel">
+                    <h4 class="mt-4 font-bold text-sm sm:text-base">
+                      Selected Custom Slots:
+                    </h4>
+                    <div *ngIf="isAnySlotSelected()">
+                      <div
+                        *ngFor="let day of weekDays"
+                        class="flex items-center justify-between py-2"
+                      >
+                        <h6 class="font-bold text-sm sm:text-base">
+                          {{ day }}:
+                        </h6>
+                        <p class="font-semibold text-sm sm:text-base">
+                          {{ summaryData.slots[day]?.time || 'Not selected' }}
+                          <span
+                            *ngIf="summaryData.slots[day]?.id"
+                            class="text-xs"
+                          >
+                          </span>
+                          <!-- Hidden input to pass the ID value -->
+                          <input
+                            *ngIf="summaryData.slots[day]?.id"
+                            type="hidden"
+                            [value]="summaryData.slots[day]?.id"
+                            name="slotId_{{ day }}"
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="flex justify-between">
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="activeTab5 === 1"
+              (click)="moveToPreviousTab()"
+            >
+              Back
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="activeTab5 === 3"
+              [ngStyle]="{ display: activeTab5 === 3 ? 'none' : 'block' }"
+              (click)="moveToNextTab()"
+            >
+              Continue
+            </button> -->
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!isSectionValid() || activeTab5 === 3"
+              [ngStyle]="{ display: activeTab5 === 3 ? 'none' : 'block' }"
+              (click)="moveToNextTab()"
+            >
+              Continue
+            </button>
+
+            <!-- Your HTML structure -->
+            <ng-container *ngIf="activeTab5 === 3">
+              <!-- Summary Content -->
+
+              <!-- <button type="button" class="btn btn-primary">
+                {{ activeTab5 === 3 ? 'Submit' : 'Continue' }}
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="onButtonClick()"
+              >
+                {{ activeTab5 === 3 ? 'Submit' : 'Continue' }}
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isLoading"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+>
+  <div
+    class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-white rounded-full"
+    role="status"
+  >
+    <span class="visually-hidden">*🤒*</span>
+  </div>
+</div>

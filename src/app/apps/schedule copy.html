@@ -1,0 +1,222 @@
+<div>
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl">Working Hours</h2>
+    </div>
+    
+    <div class="panel mt-5 overflow-hidden border-0 p-0">
+      <div class="text-sm text-gray-500 m-4">
+        <b>Fields with <span class="text-red-500">*</span> are mandatory.</b>
+      </div>
+        <ng-container *ngIf="displayType === 'list'">
+            <div class="schedule-container">
+                <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+                    <!-- Grid Layout for Buffer Time and Each Slot's -->
+                    <div class="grid grid-cols-12 gap-4 mb-4 p-5">
+                      <div class="col-span-4 sm:col-span-4">
+                        <label for="branch" class="mr-2 font-bold">
+                          <b>Select Branch:</b><span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                          <select formControlName="branch" id="branch" class="form-input w-full pr-10 appearance-none" (change)="onBranchChange($event)">
+                            <option value="" disabled selected>Select a branch</option>
+                            <ng-container *ngFor="let branch of branches">
+                              <option [value]="branch.id">{{ branch.branch_name }}</option>
+                            </ng-container>
+                          </select>
+                          <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">▼</span>
+                        </div>
+                      </div>
+                      
+                      <div class="col-span-4 sm:col-span-4">
+                        <label for="consultant" class="mr-2 font-bold">
+                          <b>Select Consultant:</b><span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                          <select formControlName="consultant" id="consultant" class="form-input w-full pr-10 appearance-none" (change)="onConsultantChange($event)">
+                            <option value="" disabled selected>Select a consultant</option>
+                            <ng-container *ngFor="let consultant of consultants">
+                              <option [value]="consultant.id">{{ consultant.name }}</option>
+                            </ng-container>
+                          </select>
+                          <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">▼</span>
+                        </div>
+                      </div>
+                      
+                      <div class="col-span-4 sm:col-span-4">
+                          <label for="eachslots" class="mr-2 font-bold">
+                            <b>Each Slot:</b><span class="text-red-500">*</span>
+                          </label>
+                          <div class="relative">
+                            <select formControlName="eachslots" id="eachslots" class="form-input w-full pr-10 appearance-none">
+                              <option value="10">10 minutes</option>
+                              <option value="20">20 minutes</option>
+                              <option value="30">30 minutes</option>
+                              <option value="40">40 minutes</option>
+                              <option value="50">50 minutes</option>
+                              <option value="60">60 minutes</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">▼</span>
+                          </div>
+                        </div>
+
+                
+                        
+                        <div class="col-span-4 sm:col-span-4">
+                          <label for="bufferTime" class="mr-2 font-bold">
+                            <b>Buffer Time:</b><span class="text-red-500">*</span>
+                          </label>
+                          <div class="relative">
+                            <select formControlName="bufferTime" id="bufferTime" class="form-input w-full pr-10 appearance-none">
+                              <option value="0">0 minutes</option>
+                              <option value="10">10 minutes</option>
+                              <option value="15" [selected]="selectedBufferTime === '15'">15 minutes</option>
+                              <option value="30">30 minutes</option>
+                              <option value="45">45 minutes</option>
+                              <option value="60">60 minutes</option>
+                            </select>
+                            
+                            
+                            
+                            <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">▼</span>
+                          </div>
+                        </div>
+                        
+                        <div class="col-span-4 sm:col-span-4">
+                          <label for="slotcount" class="mr-2 font-bold">
+                            <b>Select No of Patients per Slot:</b><span class="text-red-500">*</span>
+                          </label>
+                          <div class="relative">
+                            <select formControlName="slotcount" id="slotcount" class="form-input w-full pr-10 appearance-none">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4" [selected]="selectedPrice === '4'">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                            </select>
+                            
+                            
+                            <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">▼</span>
+                          </div>
+                        </div>
+                        <div class="col-span-4 sm:col-span-4">
+                          <label for="Price"><b>Session Price:</b><span class="text-red-500">*</span></label>
+                          <input formControlName="Price" id="Price" class="form-input w-full" [value]="selectedPrice || ''" />
+                        </div>
+                      </div>
+                    
+
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="font-bold">Day<span class="text-red-500">*</span></th>
+                            <th class="font-bold">Start Time<span class="text-red-500">*</span></th>
+                            <th></th>
+                            <th class="font-bold">End Time<span class="text-red-500">*</span></th>
+                            <th class="text-center font-bold">Slots<span class="text-red-500">*</span></th>
+                            <th class="text-center font-bold">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody formArrayName="schedules">
+                          <tr *ngFor="let schedule of schedules.controls as scheduleControls; let i = index" [formGroupName]="i" class="border-2 border-black">
+                            <td
+                              class="p-0 m-0"
+                              [ngClass]="{
+                                'bg-orange-500': schedule.get('day')?.value === 'Monday',
+                                'bg-yellow-500': schedule.get('day')?.value === 'Tuesday',
+                                'bg-green-500': schedule.get('day')?.value === 'Wednesday',
+                                'bg-blue-500': schedule.get('day')?.value === 'Thursday',
+                                'bg-purple-500': schedule.get('day')?.value === 'Friday',
+                                'bg-red-500': schedule.get('day')?.value === 'Saturday',
+                                'bg-gray-500': schedule.get('day')?.value === 'Sunday'
+                              }"
+                              style="width: 14%"
+                            >
+                              <input formControlName="day" type="text" class="form-input font-bold" style="border: none !important" readonly />
+                            </td>
+                        
+                            <td class="p-0 m-0" style="width: 14%">
+                              <input formControlName="startTime" type="time" class="form-input" (change)="onDaySlotChange(i)" />
+                            </td>
+                        
+                            <td class="text-center">–</td>
+                        
+                            <td class="p-0 m-0" style="width: 14%">
+                              <input formControlName="endTime" type="time" class="form-input" (change)="onDaySlotChange(i)" />
+                            </td>
+                        
+                            <td>
+                              <ng-container *ngIf="schedule.get('startTime')?.value && schedule.get('endTime')?.value">
+                                <div class="grid grid-cols-3 gap-4">
+                                  <ng-container *ngFor="let slot of calculateSlots(schedule.get('startTime')?.value, schedule.get('endTime')?.value, schedule.get('bufferTime')?.value, schedule.get('eachslots')?.value)">
+                                    <div class="p-2 bg-gray-100 border rounded text-center">
+                                      <ul class="list-disc pl-5">
+                                        <li>{{ slot }}</li>
+                                      </ul>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                              </ng-container>
+                              <ng-container *ngIf="!schedule.get('startTime')?.value || !schedule.get('endTime')?.value">
+                                <div class="text-red-500 text-center">
+                                  Please add slots.
+                                </div>
+                              </ng-container>
+                            </td>
+                        
+                            <td>
+                              <div class="action-buttons">
+                                <div class="flex items-center justify-center gap-4">
+                                  <a class="btn btn-primary gap-2 add_schedule cursor-pointer" (click)="addNewScheduleBelow(i)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                  </a>
+                                  <a (click)="deleteSchedule(i)" class="cursor-pointer">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-danger">
+                                      <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                      <path d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </svg>
+                                  </a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                        
+                      </table>
+                      
+                    
+                    <div class="flex items-center justify-end p-4">
+                        <button type="button" class="btn btn-outline-danger mr-2">Cancel</button>
+                        <!-- <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
+                        Save
+                      </button> -->
+                      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                        <ng-container >
+                          Save Schedule
+                        </ng-container>
+                      
+                      </button>
+                    </div>
+                  
+                </form>
+            </div>
+            
+        </ng-container>
+    </div>
+</div>
+
+
+<div
+  *ngIf="isLoading"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+>
+  <div
+    class="spinner-border animate-spin inline-block w-16 h-16 border-4 border-t-4 border-white rounded-full"
+    role="status"
+  >
+    <span class="visually-hidden">*🤒*</span>
+  </div>
+</div>
