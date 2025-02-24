@@ -1,7 +1,7 @@
 import {
   CommonModule,
   DOCUMENT
-} from "./chunk-U33IHOX5.js";
+} from "./chunk-RJKV5BGT.js";
 import {
   Directive,
   ElementRef,
@@ -24,13 +24,13 @@ import {
   ɵɵdefineNgModule,
   ɵɵdirectiveInject,
   ɵɵinject
-} from "./chunk-3FCX35IN.js";
+} from "./chunk-D7MFEWNI.js";
 import "./chunk-X7QUVJEM.js";
 import "./chunk-VO54CHLO.js";
 import {
   Subject
 } from "./chunk-LGWBCOC4.js";
-import "./chunk-4MWRP73S.js";
+import "./chunk-N6ESDQJH.js";
 
 // node_modules/ngx-window-token/fesm2020/ngx-window-token.mjs
 var WINDOW = new InjectionToken("WindowToken", typeof window !== "undefined" && window.document ? {
