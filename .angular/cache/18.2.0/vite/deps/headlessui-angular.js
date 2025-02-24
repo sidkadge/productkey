@@ -14,11 +14,11 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵdirectiveInject
-} from "./chunk-3FCX35IN.js";
+} from "./chunk-D7MFEWNI.js";
 import "./chunk-X7QUVJEM.js";
 import "./chunk-VO54CHLO.js";
 import "./chunk-LGWBCOC4.js";
-import "./chunk-4MWRP73S.js";
+import "./chunk-N6ESDQJH.js";
 
 // node_modules/headlessui-angular/fesm2020/headlessui-angular.mjs
 var id = 1;

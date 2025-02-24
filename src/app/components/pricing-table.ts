@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
     templateUrl: './pricing-table.html',
-})
+  })
+  
 export class PricingTableComponent {
     codeArr: any = [];
     toggleCode = (name: string) => {

@@ -1,19 +1,19 @@
 import {
   takeUntilDestroyed
-} from "./chunk-636HAKJD.js";
+} from "./chunk-VZEDBPHA.js";
 import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR
-} from "./chunk-CBYALRB4.js";
+} from "./chunk-ZY6IXSD5.js";
 import {
   DomSanitizer
-} from "./chunk-XKDJFFHX.js";
-import "./chunk-S46C7VIN.js";
+} from "./chunk-QV3545D7.js";
+import "./chunk-VUSHDSV2.js";
 import {
   DOCUMENT,
   NgClass,
   isPlatformServer
-} from "./chunk-U33IHOX5.js";
+} from "./chunk-RJKV5BGT.js";
 import {
   ChangeDetectorRef,
   Component,
@@ -61,7 +61,7 @@ import {
   ɵɵproperty,
   ɵɵsanitizeHtml,
   ɵɵtemplate
-} from "./chunk-3FCX35IN.js";
+} from "./chunk-D7MFEWNI.js";
 import "./chunk-X7QUVJEM.js";
 import {
   defer,
@@ -78,7 +78,7 @@ import {
 } from "./chunk-LGWBCOC4.js";
 import {
   __async
-} from "./chunk-4MWRP73S.js";
+} from "./chunk-N6ESDQJH.js";
 
 // node_modules/ngx-quill/fesm2022/ngx-quill-config.mjs
 var defaultModules = {
@@ -208,7 +208,7 @@ var _QuillService = class _QuillService {
         const maybePatchedAddEventListener = this.document.addEventListener;
         this.document.addEventListener = // eslint-disable-next-line @typescript-eslint/dot-notation
         this.document["__zone_symbol__addEventListener"] || this.document.addEventListener;
-        const quillImport = yield import("./quill-JXYYC3PW.js");
+        const quillImport = yield import("./quill-TGVJWJQ5.js");
         this.document.addEventListener = maybePatchedAddEventListener;
         this.Quill = // seems like esmodules have nested "default"
         quillImport.default?.default ?? quillImport.default ?? quillImport;

@@ -16,7 +16,8 @@ import { MenuComponent } from "./menu";
 
 import { ConsultantScheduleComponent } from './consultantschedule';
 import { AddclinicComponent } from "./addclinic";
-
+import { PaymentComponent } from "./payment";
+import { HmsComponent } from "./hms";
 
 
 import { ContactsComponent } from "./contacts";
@@ -55,6 +56,16 @@ const routes: Routes = [
     path: "apps/addclinic",
     component: AddclinicComponent,
     data: { title: "addclinic" },
+  },
+  {
+    path: "apps/payment",
+    component: PaymentComponent,
+    data: { title: "payment" },
+  },
+  {
+    path: "apps/hms",
+    component: HmsComponent,
+    data: { title: "Hms" },
   },
   {
     path: "apps/Health-and-Wellness-Services",
@@ -155,6 +166,8 @@ const routes: Routes = [
     ScrumboardComponent,
     BranchComponent,
     AddclinicComponent,
+    PaymentComponent,
+    HmsComponent,
     hwservicesComponent,
     HolidayComponent,
     LabTestComponent,

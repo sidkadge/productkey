@@ -1,0 +1,86 @@
+<ng-container *ngIf="displayType === 'list'">
+  <div class="schedule-container">
+    <form [formGroup]="planForm">
+      <!-- Grid Layout for Fields -->
+      <div class="grid grid-cols-12 gap-4 mb-4 p-5">
+        <!-- Company Name -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="companyname" class="mr-2 font-bold">
+            <b>Company Name:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input formControlName="companyname" id="companyname" class="form-input w-full" placeholder="Enter company name" required />
+          </div>
+        </div>
+
+        <!-- Last Plan -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="lastPlan" class="mr-2 font-bold">
+            <b>Last Plan Expairy Date:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input formControlName="lastPlan" id="lastPlan" class="form-input w-full" placeholder="Enter last plan" required />
+          </div>
+        </div>
+
+        <!-- Amount for One Month -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="amountForMonth" class="mr-2 font-bold">
+            <b>Amount For One Month:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input formControlName="amountForMonth" id="amountForMonth" type="number" class="form-input w-full" placeholder="Enter amount" required (input)="calculateAmount()" />
+          </div>
+        </div>
+
+        <!-- Plan Start From -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="planStartFrom" class="mr-2 font-bold">
+            <b>Plan Start From:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input
+              formControlName="planStartFrom"
+              id="planStartFrom"
+              type="date"
+              class="form-input w-full"
+              readonly
+            />
+          </div>
+        </div>
+        
+
+        <!-- Select Plan Month -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="planMonth" class="mr-2 font-bold">
+            <b>Select Plan Month:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <select formControlName="planMonth" id="planMonth" class="form-input w-full" required (change)="calculateAmount()">
+              <option value="" disabled selected>Select a month</option>
+              <option value="1">1 Month</option>
+              <option value="3">3 Months</option>
+              <option value="6">6 Months</option>
+              <option value="12">12 Months</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Amount According to Plan -->
+        <div class="col-span-4 sm:col-span-4">
+          <label for="amountAccordingToPlan" class="mr-2 font-bold">
+            <b>Amount According to Plan:</b><span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input formControlName="amountAccordingToPlan" id="amountAccordingToPlan" type="number" class="form-input w-full" placeholder="Calculated amount" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Pay Now Button -->
+      <div class="flex justify-end">
+        <button type="button" class="btn btn-primary mt-5" (click)="payNow()" [disabled]="!planForm.valid">Pay Now</button>
+      </div>
+    </form>
+  </div>
+</ng-container>

@@ -1,6 +1,6 @@
 <div>
   <div class="flex flex-wrap items-center gap-4">
-    <h2 class="text-xl">Clinic</h2>
+    <h2 class="text-xl">Hms ProductKey</h2>
 
     <a class="btn btn-primary gap-2 add_schedule" (click)="editUser()">
       <svg
@@ -48,11 +48,12 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Clinic Name</th>
-              <th>Backend  Url</th>
-              <th>Subscription Fee(One Month)</th>
+              <th>Client Name</th>
               <th>Subscription Start Date</th>
               <th>Subscription End Date</th>
+              <th>PC Type</th>
+              <!-- <th>Key</th> -->
+              <th>UUID</th>
               
               <th class="!text-center">Actions</th>
             </tr>
@@ -65,11 +66,12 @@
                 <td>{{ i + 1 }}</td>
                 <!-- Updated to show sequential number -->
 
-                <td>{{ contact.clinicname }}</td>
-                <td>{{ contact.Project_Url }}</td>
-                <td>{{ contact.Subscription_fee }}</td>
-                <td>{{ contact.subscribtion_startdate }}</td>
-                <td>{{ contact.subscribtion_enddate }}</td>
+                <td>{{ contact.Clientname }}</td>
+                <td>{{ contact.startDate }}</td>
+                <td>{{ contact.endDate }}</td>
+                <td>{{ contact.pctype }}</td>
+                <!-- <td>{{ contact.encryptedKey }}</td> -->
+                <td>{{ contact.uuid }}</td>
 
                 <td>
                   <div class="flex items-center justify-center gap-4">
@@ -256,7 +258,7 @@
   <ngx-custom-modal #addContactModal class="no-footer z-40">
     <ng-template #modalHeader>
       <div class="!font-medium">
-        {{ params.controls['id'].value ? 'Edit Clinic' : 'Add Clinic' }}
+        {{ params.controls['id'].value ? 'Edit Hms ProductKey' : 'Add Hms ProductKey' }}
       </div>
     </ng-template>
 
@@ -269,92 +271,119 @@
       <form
         [formGroup]="params"
         class="text-sm"
-        (ngSubmit)="saveUser()"
+        (ngSubmit)="generateAndEncryptProductKey()"
         ngNativeValidate
       >
+        <!-- UUID Field -->
         <div class="mb-5">
-          <label for="clinicname"
-            >Clinic Name <span class="text-red-500">*</span></label
+          <label for="Clientname"
+            >Client Name <span class="text-red-500">*</span></label
           >
           <input
-            id="clinicname"
+            id="Clientname"
             type="text"
-            placeholder="Enter Clinic Name"
+            placeholder="Enter Client Name"
             class="form-input"
-            formControlName="clinicname"
+            formControlName="Clientname"
+          />
+        </div>
+        <div class="mb-5">
+          <label for="uuid">UUID: <span class="text-red-500">*</span></label>
+          <input
+            id="uuid"
+            formControlName="uuid"
+            type="text"
+            class="form-input"
+            placeholder="Enter UUID"
           />
         </div>
     
+        <!-- PC Type Field -->
         <div class="mb-5">
-          <label for="Project_Url"
-            >Backend Url <span class="text-red-500">*</span></label
-          >
-          <input
-            id="Project_Url"
-            type="text"
-            placeholder="Enter Project Url"
+          <label for="pctype">PC Type: <span class="text-red-500">*</span></label>
+          <select
+            id="pctype"
+            formControlName="pctype"
             class="form-input"
-            formControlName="Project_Url"
-          />
-        </div>
-        <div class="mb-5">
-          <label for="Subscription_fee"
-            >Subscription Fee (One Month) <span class="text-red-500">*</span></label
           >
-          <input
-            id="Subscription_fee"
-            type="text"
-            placeholder="Enter Subscription Ammount"
-            class="form-input"
-            formControlName="Subscription_fee"
-          />
+            <option value="Select" selected>Select</option>
+            <option value="Server">Server</option>
+            <option value="Client">Client</option>
+          </select>
         </div>
+    
         <!-- Start Date Field -->
         <div class="mb-5">
-          <label for="subscribtion_startdate"
-            >Subscription Start Date <span class="text-red-500">*</span></label
-          >
+          <label for="startDate">Start Date: <span class="text-red-500">*</span></label>
           <input
-            id="subscribtion_startdate"
+            id="startDate"
+            formControlName="startDate"
             type="date"
             class="form-input"
-            formControlName="subscribtion_startdate"
           />
         </div>
     
         <!-- End Date Field -->
         <div class="mb-5">
-          <label for="subscribtion_enddate"
-            >Subscription End Date <span class="text-red-500">*</span></label
-          >
+          <label for="endDate">End Date: <span class="text-red-500">*</span></label>
           <input
-            id="subscribtion_enddate"
+            id="endDate"
+            formControlName="endDate"
             type="date"
             class="form-input"
-            formControlName="subscribtion_enddate"
           />
         </div>
     
-        <div class="mt-8 flex items-center justify-end">
-          <button
-            type="button"
-            class="btn btn-outline-danger"
-            (click)="addContactModal.close()"
-          >
-            Cancel
-          </button>
+        <div class="mt-8 flex items-center justify-center">
           <button
             type="submit"
-            class="btn btn-primary ltr:ml-4 rtl:mr-4"
+            class="btn btn-primary"
+            [disabled]="params.invalid"
+          >
+            Generate Product Key
+          </button>
+        </div>
+        <div class="mt-8 flex items-center justify-end">
+          <textarea
+          *ngIf="encryptedKey"
+          readonly
+          rows="2"
+          style="width: 100%; word-break: break-word; white-space: normal; resize: none;"
+          [value]="encryptedKey"
+        ></textarea>
+          <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="copyToClipboard(encryptedKey)"
+        >
+          Copy
+        </button>
+          <button
+            type="submit"
+            class="btn btn-primary ltr:ml-4 rtl:mr-4" (click)=" saveUser()"
             [disabled]="isLoading"
           >
             <ng-container>
-              {{ params.controls['id'].value ? 'Update' : 'Add' }}
+              {{ params.controls['id'].value ? 'Update' : 'Save' }}
             </ng-container>
           </button>
         </div>
       </form>
+      <!-- <div class="mt-8 flex items-right justify-right">
+        <textarea
+        *ngIf="encryptedKey"
+        readonly
+        rows="2"
+        style="width: 100%; word-break: break-word; white-space: normal; resize: none;"
+        [value]="encryptedKey"
+      ></textarea><br>
+      <button (click)="copyToClipboard(encryptedKey)" type="button" class="btn btn-secondary mt-2">
+        Copy
+      </button>
+      </div> -->
+  
     </ng-template>
+    
     
   </ngx-custom-modal>
 </div>

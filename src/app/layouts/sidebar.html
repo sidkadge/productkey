@@ -64,7 +64,44 @@
               </div>
             </a>
           </li>
-    
+          <li class="nav-item" *ngIf="user.role == 'SuperAdmin'">
+            <a
+            routerLink="/apps/payment"
+              class="group"
+              routerLinkActive="active"
+              (click)="toggleMobileMenu()"
+            >
+              <div class="flex items-center">
+                <icon-menu-dashboard
+                  class="shrink-0 group-hover:!text-primary"
+                />
+                <span
+                  class="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3"
+                >
+                  {{ 'Pricing' | translate }}
+                </span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="user.role == 'SuperAdmin'">
+            <a
+            routerLink="/apps/hms"
+              class="group"
+              routerLinkActive="active"
+              (click)="toggleMobileMenu()"
+            >
+              <div class="flex items-center">
+                <icon-menu-dashboard
+                  class="shrink-0 group-hover:!text-primary"
+                />
+                <span
+                  class="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3"
+                >
+                  {{ 'HMS' | translate }}
+                </span>
+              </div>
+            </a>
+          </li>
         </ul>
       </ng-scrollbar>
     </div>

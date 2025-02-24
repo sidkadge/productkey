@@ -6,17 +6,36 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 // import { environment } from "src/environments/environment";
 import { ApiService } from 'src/app/api.service';
-
+import * as CryptoJS from 'crypto-js';
+import * as LZString from 'lz-string';
 @Component({
-  templateUrl: "./addclinic.html",
+  templateUrl: "./hms.html",
   animations: [toggleAnimation],
 })
-export class AddclinicComponent implements OnInit {
+export class HmsComponent implements OnInit {
+  productKey: string | null = null;
+  encryptedKey: string = '';
+  encryptionKey: string = '';
+  
+  iv: string = '';
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private apiService: ApiService,
-  ) {}
+
+    
+  ) {
+    this.params = this.fb.group({
+      uuid: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      pctype: ['', Validators.required]
+      
+    });
+    // this.generateEncryptionKey();
+    this.encryptionKey = "HMSKey@123456789"
+    this.iv = '@HMSIV1234567890';
+  }
 
   displayType = "list";
   @ViewChild("addContactModal") addContactModal!: NgxCustomModalComponent;
@@ -29,11 +48,12 @@ export class AddclinicComponent implements OnInit {
   initForm() {
     this.params = this.fb.group({
       id: [0],
-      clinicname: ["", Validators.required],
-      Project_Url: ["", Validators.required],
-      Subscription_fee: ["", Validators.required],
-      subscribtion_startdate: ['', Validators.required],
-      subscribtion_enddate: ['', Validators.required],
+      Clientname :['',Validators.required],
+      uuid: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      pctype: ['', Validators.required],
+      encryptedKey: [''],
     });
   }
 
@@ -44,7 +64,7 @@ export class AddclinicComponent implements OnInit {
 
   fetchClinics() {
     // this.http.get(`http://localhost/OPDClinic/read/tbl_opdproductkey`).subscribe(
-      this.apiService.get("read/tbl_opdproductkey").subscribe(
+      this.apiService.get("read/tbl_offlineproductkey").subscribe(
 
       (response: any) => {
         if (response.status === 200) {
@@ -63,7 +83,7 @@ export class AddclinicComponent implements OnInit {
 
   searchContacts() {
     this.filterdContactsList = this.contactList.filter((d) =>
-      d.clinicname.toLowerCase().includes(this.searchUser.toLowerCase())
+      d.Clientname.toLowerCase().includes(this.searchUser.toLowerCase())
     );
   }
 
@@ -73,11 +93,12 @@ export class AddclinicComponent implements OnInit {
     if (user) {
       this.params.setValue({
         id: user.id,
-        clinicname: user.clinicname,
-        Project_Url: user.Project_Url,
-        subscribtion_startdate : user.subscribtion_startdate,
-        subscribtion_enddate : user.subscribtion_enddate,
-        Subscription_fee : user.Subscription_fee,
+        Clientname: user.Clientname,
+        uuid: user.uuid,
+        startDate : user.startDate,
+        endDate : user.endDate,
+        pctype : user.pctype,
+        encryptedKey: user.encryptedKey,
       });
     }
   }
@@ -92,17 +113,18 @@ export class AddclinicComponent implements OnInit {
 
     const formData = this.params.value;
     const requestBody = {
-      clinicname: formData.clinicname,
-      Project_Url: formData.Project_Url,
-      subscribtion_startdate : formData.subscribtion_startdate,
-      subscribtion_enddate : formData.subscribtion_enddate,
-      Subscription_fee:formData.Subscription_fee,
+      Clientname: formData.Clientname,
+      uuid: formData.uuid,
+      startDate : formData.startDate,
+      endDate : formData.endDate,
+      pctype:formData.pctype,
+      encryptedKey: this.encryptedKey, 
     };
-
+console.log(requestBody)
     if (formData.id) {
       // Update user in the API
       // this.http.post(`http://localhost/OPDClinic/update/tbl_opdproductkey/${formData.id}`,requestBody).subscribe(
-        const endpoint = `update/tbl_opdproductkey/${formData.id}`;
+        const endpoint = `updatetofflineproductkey/tbl_offlineproductkey/${formData.id}`;
         this.apiService.post(endpoint,requestBody).subscribe(
 
         (response) => {
@@ -110,13 +132,14 @@ export class AddclinicComponent implements OnInit {
             console.log("Update response:", response);
             let user: any = this.contactList.find((d) => d.id === formData.id);
             if (user) {
-              user.clinicname = formData.clinicname;
-              user.Project_Url = formData.Project_Url;
-              user.Subscription_fee = formData.Subscription_fee;
-              user.subscribtion_startdate = formData.subscribtion_startdate;
-              user.subscribtion_enddate = formData.subscribtion_enddate;
+              user.Clientname = formData.Clientname;
+              user.uuid = formData.uuid;
+              user.startDate = formData.startDate;
+              user.endDate = formData.endDate;
+              user.pctype = formData.pctype;
+              user.encryptedKey = this.encryptedKey;
             }
-            this.showMessage("Clinics has been updated successfully.");
+            this.showMessage("Client has been updated successfully.");
             this.fetchClinics();
 
             this.addContactModal.close();
@@ -131,7 +154,7 @@ export class AddclinicComponent implements OnInit {
       // Add user to the API
     
       // this.http.post("http://localhost/OPDClinic/create/tbl_opdproductkey", requestBody).subscribe(
-        const endpoint = `create/tbl_opdproductkey`;
+        const endpoint = `createtofflineproductkey/tbl_offlineproductkey`;
         this.apiService.post(endpoint,requestBody).subscribe(
 
         (response) => {
@@ -141,11 +164,12 @@ export class AddclinicComponent implements OnInit {
               id: this.contactList.length
                 ? Math.max(...this.contactList.map((u) => u.id)) + 1
                 : 1,
-              clinicname: formData.clinicname,
-              Project_Url: formData.Project_Url,
-              Subscription_fee: formData.Subscription_fee,
-              subscribtion_startdate : formData.subscribtion_startdate,
-              subscribtion_enddate : formData.subscribtion_enddate,
+                Clientname: formData.Clientname,
+                uuid: formData.uuid,
+                startDate: formData.startDate,
+                endDate : formData.endDate,
+                pctype : formData.pctype,
+                encryptedKey: this.encryptedKey,
             };
             this.contactList.unshift(newUser);
             this.searchContacts();
@@ -165,7 +189,7 @@ export class AddclinicComponent implements OnInit {
 
   deleteUser(formData: any) {
     const requestBody = {};
-    const endpoint = `delete/tbl_opdproductkey/${formData.id}`;
+    const endpoint = `delete/tbl_offlineproductkey/${formData.id}`;
     this.apiService.post(endpoint,requestBody).subscribe(
     // this.http.post(`http://localhost/OPDClinic/delete/tbl_opdproductkey/${formData.id}`,requestBody).subscribe(
         (response) => {
@@ -175,7 +199,7 @@ export class AddclinicComponent implements OnInit {
           );
           this.fetchClinics();
 
-          this.showMessage("Clinics has been deleted successfully.");
+          this.showMessage("Client has been deleted successfully.");
           this.addContactModal.close();
         },
         (error) => {
@@ -184,7 +208,72 @@ export class AddclinicComponent implements OnInit {
         }
       );
   }
+  generateAndEncryptProductKey() {
+    if (this.params.valid) {
+      const { uuid, startDate, endDate, pctype } = this.params.value;
 
+      // Convert startDate and endDate to 'dd-MM-yyyy' format
+      const formattedStartDate = new Date(startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+      const formattedEndDate = new Date(endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+      const currentDate = new Date();
+      const formattedCurrentDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${currentDate.getFullYear()}`;
+
+        console.log(formattedCurrentDate);
+      // Validate that the end date is after the start date
+      if(new Date(formattedStartDate) < new Date(formattedCurrentDate))
+      {
+        alert('Start date must be greater or should be Current Date!');
+        return;
+      }
+      
+      // if (new Date(formattedEndDate) > new Date(formattedStartDate)) {
+      //   alert('End date must be greater than start date!');
+      //   return;
+      // }
+      if(new Date(formattedStartDate) > new Date(formattedEndDate))
+      {
+        alert('Start date should not be greater than End Date!');
+        return;
+      }
+      const shortUuid = uuid.substring(0, 8); 
+      const shortPctype = pctype.substring(0, 3);
+      const uuidLength = uuid.length;
+      this.productKey = `${uuidLength}${shortUuid}${formattedStartDate}${formattedEndDate}~${shortPctype}`;
+
+      this.encryptedKey = this.encrypt(this.productKey);
+
+      // console.log('Product Key:', this.productKey);
+      // console.log('Encrypted Key:', this.encryptedKey);
+    } else {
+      alert('Please fill out all fields correctly.');
+    }
+  }
+
+  private encrypt(data: string): string {
+    const key = CryptoJS.enc.Utf8.parse(this.encryptionKey);
+    const iv = CryptoJS.enc.Utf8.parse(this.iv);
+
+    const encrypted = CryptoJS.AES.encrypt(data, key, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+
+    return encrypted.toString();
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        // Tooltip will automatically display when using [matTooltip] directive
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      }
+    );
+  }
   showMessage(msg = "", type = "success") {
     const toast: any = Swal.mixin({
       toast: true,

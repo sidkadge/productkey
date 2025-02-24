@@ -1,11 +1,11 @@
 import {
   NG_VALUE_ACCESSOR
-} from "./chunk-CBYALRB4.js";
+} from "./chunk-ZY6IXSD5.js";
 import {
   DOCUMENT,
   NgClass,
   NgTemplateOutlet
-} from "./chunk-U33IHOX5.js";
+} from "./chunk-RJKV5BGT.js";
 import {
   Attribute,
   ChangeDetectionStrategy,
@@ -81,7 +81,7 @@ import {
   ɵɵtextInterpolate,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-3FCX35IN.js";
+} from "./chunk-D7MFEWNI.js";
 import "./chunk-X7QUVJEM.js";
 import {
   animationFrameScheduler,
@@ -101,7 +101,7 @@ import {
 } from "./chunk-LGWBCOC4.js";
 import {
   __spreadValues
-} from "./chunk-4MWRP73S.js";
+} from "./chunk-N6ESDQJH.js";
 
 // node_modules/@ng-select/ng-select/fesm2022/ng-select-ng-select.mjs
 var _c0 = ["content"];

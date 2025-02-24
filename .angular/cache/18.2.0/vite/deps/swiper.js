@@ -22,7 +22,7 @@ import {
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-4MWRP73S.js";
+} from "./chunk-N6ESDQJH.js";
 
 // node_modules/swiper/shared/swiper-core.mjs
 var support;

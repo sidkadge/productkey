@@ -133,7 +133,7 @@ export class SweetalertComponent {
                 timerProgressBar: true,
                 customClass: { popup: 'sweet-alerts' },
                 didOpen: () => {
-                    Swal.showLoading();
+                    Swal.showLoading(null);
                     const b: any = Swal.getHtmlContainer()?.querySelector('b');
                     timerInterval = setInterval(() => {
                         b.textContent = Swal.getTimerLeft();
